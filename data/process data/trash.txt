@@ -1,0 +1,678 @@
+
+
+
+ ,knnlnpdd_df = pd.read_csv("price_demand_data.csv")
+pdd_df["SETTLEMENTDATE"] = pd.to_datetime(pdd_df["SETTLEMENTDATE"])
+pdd_df = pd.read_csv("price_demand_data.csv")
+pdd_df["SETTLEMENTDATE"] = pd.to_datetime(pdd_df["SETTLEMENTDATE"])
+pdd_df = pd.read_csv("price_demand_data.csv")
+pdd_df["SETTLEMENTDATE"] = pd.to_datetime(pdd_df["SETTLEMENTDATE"])pdd_df = pd.read_csv("price_demand_data.csv")
+pdd_df["SETTLEMENTDATE"] = pd.to_datetime(pdd_df["SETTLEMENTDATE"])#3. Normalize: Rescale the values to be between 0 and 1
+for feature in melb_imputed.columns:
+    min = melb_imputed[feature].min()
+    max = melb_imputed[feature].max()
+    for data in melb_imputed[feature]:
+        data = (data - min) / (max - min)
+
+
+        melb_normalized.plot.line()
+
+'''Preprocessing'''
+import pandas as pd
+from sklearn.impute import SimpleImputer
+import numpy as np
+import matplotlib.pyplot as plt
+import datetime
+
+
+
+
+"""
+MELBOURNE
+"""
+#PRE-PROCESS MELBOURNE WEATHER DATASET
+melb_df = pd.read_csv("weather_melbourne.csv")
+
+# Filter data: Only interested in quantitative data
+melb_weather = melb_df[["Date", "Minimum temperature (°C)", "Maximum temperature (°C)", "Rainfall (mm)", "Evaporation (mm)", 
+"Sunshine (hours)", "Speed of maximum wind gust (km/h)"]]
+
+# Missing Values: Impute Missing Values with Mean or interpolate?
+melb_imputed = melb_df[["Minimum temperature (°C)", "Maximum temperature (°C)", "Rainfall (mm)", "Evaporation (mm)", 
+"Sunshine (hours)", "Speed of maximum wind gust (km/h)"]]
+melb_imputed = melb_imputed.fillna(melb_imputed.median())
+
+# Include and Set Date as Index
+date = melb_weather["Date"]
+melb_imputed.insert(0, "Date", date)
+melb_imputed.set_index("Date", inplace=True)
+
+# Output pre-processed Melbourne Weather Dataset as csv
+melb_imputed.to_csv("melb_weather.csv")
+
+# Normalize: Rescale the values to be between 0 and 1
+melb_normalized = (melb_imputed - melb_imputed.min()) / (melb_imputed.max() - melb_imputed.min())
+
+# Output pre-processed normalized Melbourne Weather Dataset as csv
+melb_normalized.to_csv("melb_weather_normalized.csv") 
+
+
+#PRE-PROCESS PRICE DEMAND DATASET
+pdd_df = pd.read_csv("price_demand_data.csv")
+
+# Get dataframe for VIC
+pdd_melb = pdd_df[pdd_df["REGION"] == "VIC1"]
+
+# Change date format to daily date
+date_list = []
+for date in pdd_melb["SETTLEMENTDATE"]:
+    date_list.append(date[:-9])
+pdd_melb.insert(1, "DATE", date_list)
+
+# Find sum of energy for each day
+pdd_melb = round(pdd_melb.groupby("DATE")["TOTALDEMAND"].sum(), 2)
+pdd_melb.rename("TOTAL DEMAND", inplace=True)
+
+# Output pre-processed Melbourne Price Demand Dataset as csv
+pdd_melb.to_csv("pdd_melb.csv")
+
+
+
+"""
+"""
+SYDNEY
+"""
+#PRE-PROCESS SYDNEY WEATHER DATASET
+syd_df = pd.read_csv("weather_sydney.csv")
+
+# Filter data: Only interested in quantitative data
+syd_weather = syd_df[["Date", "Minimum temperature (°C)", "Maximum temperature (°C)", "Rainfall (mm)", "Evaporation (mm)", 
+"Sunshine (hours)", "Speed of maximum wind gust (km/h)"]]
+
+# Missing Values: Impute Missing Values with Mean or interpolate?
+syd_imputed = syd_df[["Minimum temperature (°C)", "Maximum temperature (°C)", "Rainfall (mm)", "Evaporation (mm)", 
+"Sunshine (hours)", "Speed of maximum wind gust (km/h)"]]
+syd_imputed = syd_imputed.fillna(syd_imputed.median())
+
+# Include and Set Date as Index
+date = syd_weather["Date"]
+syd_imputed.insert(0, "Date", date)
+syd_imputed.set_index("Date", inplace=True)
+
+# Output pre-processed Sydney Weather Dataset as csv
+syd_imputed.to_csv("syd_weather.csv")
+
+# Normalize: Rescale the values to be between 0 and 1
+syd_normalized = (syd_imputed - syd_imputed.min()) / (syd_imputed.max() - syd_imputed.min())
+
+# Output pre-processed normalized Sydney Weather Dataset as csv
+syd_normalized.to_csv("syd_weather_normalized.csv") 
+
+#PRE-PROCESS PRICE DEMAND DATASET
+pdd_df = pd.read_csv("price_demand_data.csv")
+
+# Get dataframe for NSW
+pdd_syd = pdd_df[pdd_df["REGION"] == "NSW1"]
+
+# Change date format to daily date
+date_list = []
+for date in pdd_syd["SETTLEMENTDATE"]:
+    date_list.append(date[:-9])
+pdd_syd.insert(1, "DATE", date_list)
+
+# Find sum of energy for each day
+pdd_syd = round(pdd_syd.groupby("DATE")["TOTALDEMAND"].sum(), 2)
+pdd_syd.rename("TOTAL DEMAND", inplace=True)
+
+# Output pre-processed Sydney Price Demand Dataset as csv
+pdd_syd.to_csv("pdd_syd.csv")
+
+
+
+
+"""
+ADELAIDE
+"""
+#PRE-PROCESS ADELAIDE WEATHER DATASET
+adld_df = pd.read_csv("weather_adelaide.csv")
+
+# Filter data: Only interested in quantitative data
+adld_weather = adld_df[["Date", "Minimum temperature (°C)", "Maximum temperature (°C)", "Rainfall (mm)", "Evaporation (mm)", 
+"Sunshine (hours)", "Speed of maximum wind gust (km/h)"]]
+
+# Missing Values: Impute Missing Values with Mean or interpolate?
+adld_imputed = adld_df[["Minimum temperature (°C)", "Maximum temperature (°C)", "Rainfall (mm)", "Evaporation (mm)", 
+"Sunshine (hours)", "Speed of maximum wind gust (km/h)"]]
+adld_imputed = adld_imputed.fillna(adld_imputed.median())
+
+# Include and Set Date as Index
+date = adld_weather["Date"]
+adld_imputed.insert(0, "Date", date)
+adld_imputed.set_index("Date", inplace=True)
+
+# Output pre-processed Adelaide Weather Dataset as csv
+adld_imputed.to_csv("adld_weather.csv")
+
+# Normalize: Rescale the values to be between 0 and 1
+adld_normalized = (adld_imputed - adld_imputed.min()) / (adld_imputed.max() - adld_imputed.min())
+
+# Output pre-processed normalized Adelaide Weather Dataset as csv
+adld_normalized.to_csv("adld_weather_normalized.csv") 
+
+#PRE-PROCESS PRICE DEMAND DATASET
+pdd_df = pd.read_csv("price_demand_data.csv")
+
+# Get dataframe for SA
+pdd_adld = pdd_df[pdd_df["REGION"] == "SA1"]
+
+# Change date format to daily date
+date_list = []
+for date in pdd_adld["SETTLEMENTDATE"]:
+    date_list.append(date[:-9])
+pdd_adld.insert(1, "DATE", date_list)
+
+# Find sum of energy for each day
+pdd_adld = round(pdd_adld.groupby("DATE")["TOTALDEMAND"].sum(), 2)
+pdd_adld.rename("TOTAL DEMAND", inplace=True)
+
+# Output pre-processed Adelaide Price Demand Dataset as csv
+pdd_adld.to_csv("pdd_adld.csv")
+
+
+
+
+"""
+BRISBANE
+"""
+#PRE-PROCESS BRISBANE WEATHER DATASET
+bris_df = pd.read_csv("weather_brisbane.csv")
+
+# Filter data: Only interested in quantitative data
+bris_weather = bris_df[["Date", "Minimum temperature (°C)", "Maximum temperature (°C)", "Rainfall (mm)", "Evaporation (mm)", 
+"Sunshine (hours)", "Speed of maximum wind gust (km/h)"]]
+
+# Missing Values: Impute Missing Values with Mean or interpolate?
+bris_imputed = bris_df[["Minimum temperature (°C)", "Maximum temperature (°C)", "Rainfall (mm)", "Evaporation (mm)", 
+"Sunshine (hours)", "Speed of maximum wind gust (km/h)"]]
+bris_imputed = bris_imputed.fillna(bris_imputed.median())
+
+# Include and Set Date as Index
+date = melb_weather["Date"]
+bris_imputed.insert(0, "Date", date)
+bris_imputed.set_index("Date", inplace=True)
+
+# Output pre-processed Brisbane Weather Dataset as csv
+bris_imputed.to_csv("bris_weather.csv")
+
+# Normalize: Rescale the values to be between 0 and 1
+bris_normalized = (bris_imputed - bris_imputed.min()) / (bris_imputed.max() - bris_imputed.min())
+
+# Output pre-processed normalized Brisbane Weather Dataset as csv
+bris_normalized.to_csv("bris_weather_normalized.csv") 
+
+#PRE-PROCESS PRICE DEMAND DATASET
+pdd_df = pd.read_csv("price_demand_data.csv")
+
+# Get dataframe for QLD
+pdd_bris = pdd_df[pdd_df["REGION"] == "QLD1"]
+
+# Change date format to daily date
+date_list = []
+for date in pdd_bris["SETTLEMENTDATE"]:
+    date_list.append(date[:-9])
+pdd_bris.insert(1, "DATE", date_list)
+
+# Find sum of energy for each day
+pdd_bris = round(pdd_bris.groupby("DATE")["TOTALDEMAND"].sum(), 2)
+pdd_bris.rename("TOTAL DEMAND", inplace=True)
+
+# Output pre-processed Brisbane Price Demand Dataset as csv
+pdd_bris.to_csv("pdd_bris.csv")
+
+# Temperature
+q3_t, q1_t = np.percentile(melb_nn["Mean Temperature (°C)"], [75 ,25])
+iqr_t = q3_t - q1_t
+h_t = 2 * iqr_t / len(melb_nn)**(1/3)
+temp_bins = int((melb_nn["Mean Temperature (°C)"].max()-melb_nn["Mean Temperature (°C)"].min())/h_t)
+equal_width_temp = KBinsDiscretizer(n_bins=temp_bins, encode='ordinal', strategy='uniform')
+melb["Binned Mean Temperature"] = equal_width_temp.fit_transform(melb["Mean Temperature (°C)"].to_numpy().reshape(-1, 1)).astype(int)
+# Rainfall
+q3_r, q1_r = np.percentile(melb_nn["Rainfall (mm)"], [75 ,25])
+iqr_r = q3_r - q1_r
+h_r = 2 * iqr_r / len(melb_nn)**(1/3)
+rain_bins = int((melb_nn["Rainfall (mm)"].max()-melb_nn["Rainfall (mm)"].min())/h_r) # 281 ?!
+equal_width_rain = KBinsDiscretizer(n_bins=rain_bins, encode='ordinal', strategy='uniform')
+melb["Binned Rainfall"] = equal_width_rain.fit_transform(melb["Rainfall (mm)"].to_numpy().reshape(-1, 1)).astype(int)
+# Energy demand
+q3_d, q1_d = np.percentile(melb_nn["TOTAL DEMAND"], [75 ,25])
+iqr_d = q3_d - q1_d
+h_d = 2 * iqr_d / len(melb_nn)**(1/3)
+demand_bins = int((melb_nn["TOTAL DEMAND"].max()-melb_nn["TOTAL DEMAND"].min())/h_d) #Find number of bins
+equal_width_demand = KBinsDiscretizer(n_bins=demand_bins, encode='ordinal', strategy='uniform')
+melb["Binned Total Demand"] = equal_width_demand.fit_transform(melb["TOTAL DEMAND"].to_numpy().reshape(-1, 1)).astype(int)
+
+# visualize histogram of demand against frequency of bins
+plt.hist(melb["Binned Total Demand"], bins=demand_bins)
+plt.xlabel("Total Demand")
+plt.ylabel("Frequency")
+plt.title("Victoria")
+plt.savefig("melb_demand_freq.png")
+plt.close()
+
+# """
+# SYDNEY
+# """ #PRE-PROCESS SYDNEY WEATHER DATASET
+# syd_df = pd.read_csv("weather_sydney.csv")
+
+# # Filter data: Only interested in quantitative data
+# syd_weather = syd_df[["Date", "Minimum temperature (°C)", "Maximum temperature (°C)", "Rainfall (mm)", "Evaporation (mm)", 
+# "Sunshine (hours)", "Speed of maximum wind gust (km/h)"]]
+
+# # Missing Values: Impute Missing Values with Mean or interpolate?
+# syd_imputed = syd_df[["Minimum temperature (°C)", "Maximum temperature (°C)", "Rainfall (mm)", "Evaporation (mm)", 
+# "Sunshine (hours)", "Speed of maximum wind gust (km/h)"]]
+# syd_imputed = syd_imputed.fillna(syd_imputed.median())
+
+# # Find Mean Value and Insert to Dataframe
+# mean_temp = []
+# for i in range(len(syd_imputed)):
+#     mean_temp.append((syd_imputed["Minimum temperature (°C)"][i] + syd_imputed["Maximum temperature (°C)"][i])/2)
+# syd_imputed.insert(2, "Mean Temperature (°C)", mean_temp)
+
+# # Change Date Format, Insert Date to DataFrame
+# date = syd_weather["Date"]
+# new_date_format = []
+# for value in date:
+#     value = datetime.datetime.strptime(str(value), "%Y-%m-%d").strftime("%Y/%m/%d")
+#     new_date_format.append(value)
+# syd_imputed.insert(0, "Date", new_date_format)
+# syd_imputed.set_index("Date", inplace=True)
+
+# # Output pre-processed Sydney Weather Dataset as csv
+# syd_imputed.to_csv("syd_weather.csv")
+
+# # Normalize: Rescale the values to be between 0 and 1
+# syd_normalized = (syd_imputed - syd_imputed.min()) / (syd_imputed.max() - syd_imputed.min())
+
+# # Output pre-processed normalized Sydney Weather Dataset as csv
+# syd_normalized.to_csv("syd_weather_normalized.csv") 
+
+# #PRE-PROCESS PRICE DEMAND DATASET
+# pdd_df = pd.read_csv("price_demand_data.csv")
+
+# # Get dataframe for NSW
+# pdd_syd = pdd_df[pdd_df["REGION"] == "NSW1"]
+
+# # Change date format to daily date
+# date_list = []
+# for date in pdd_syd["SETTLEMENTDATE"]:
+#     date_list.append(date[:-9])
+# pdd_syd.insert(1, "Date", date_list)
+
+# # Find sum of energy for each day
+# pdd_syd = round(pdd_syd.groupby("Date")["TOTALDEMAND"].sum(), 2)
+# pdd_syd.rename("TOTAL DEMAND", inplace=True)
+# pdd_syd = pdd_syd.drop(pdd_syd.index[-1])
+
+# # Output pre-processed Sydney Price Demand Dataset as csv
+# pdd_syd.to_csv("pdd_syd.csv")
+
+
+
+
+# """
+# ADELAIDE
+# """
+# #PRE-PROCESS ADELAIDE WEATHER DATASET
+# adld_df = pd.read_csv("weather_adelaide.csv")
+
+# # Filter data: Only interested in quantitative data
+# adld_weather = adld_df[["Date", "Minimum temperature (°C)", "Maximum temperature (°C)", "Rainfall (mm)", "Evaporation (mm)", 
+# "Sunshine (hours)", "Speed of maximum wind gust (km/h)"]]
+
+# # Missing Values: Impute Missing Values with Mean or interpolate?
+# adld_imputed = adld_df[["Minimum temperature (°C)", "Maximum temperature (°C)", "Rainfall (mm)", "Evaporation (mm)", 
+# "Sunshine (hours)", "Speed of maximum wind gust (km/h)"]]
+# adld_imputed = adld_imputed.fillna(adld_imputed.median())
+
+# # Find Mean Value and Insert to Dataframe
+# mean_temp = []
+# for i in range(len(adld_imputed)):
+#     mean_temp.append((adld_imputed["Minimum temperature (°C)"][i] + adld_imputed["Maximum temperature (°C)"][i])/2)
+# adld_imputed.insert(2, "Mean Temperature (°C)", mean_temp)
+
+# # Change Date Format, Insert Date to DataFrame
+# date = adld_weather["Date"]
+# new_date_format = []
+# for value in date:
+#     value = datetime.datetime.strptime(str(value), "%Y-%m-%d").strftime("%Y/%m/%d")
+#     new_date_format.append(value)
+# adld_imputed.insert(0, "Date", new_date_format)
+# adld_imputed.set_index("Date", inplace=True)
+
+# # Output pre-processed Adelaide Weather Dataset as csv
+# adld_imputed.to_csv("adld_weather.csv")
+
+# # Normalize: Rescale the values to be between 0 and 1
+# adld_normalized = (adld_imputed - adld_imputed.min()) / (adld_imputed.max() - adld_imputed.min())
+
+# # Output pre-processed normalized Adelaide Weather Dataset as csv
+# adld_normalized.to_csv("adld_weather_normalized.csv") 
+
+# #PRE-PROCESS PRICE DEMAND DATASET
+# pdd_df = pd.read_csv("price_demand_data.csv")
+
+# # Get dataframe for SA
+# pdd_adld = pdd_df[pdd_df["REGION"] == "SA1"]
+
+# # Change date format to daily date
+# date_list = []
+# for date in pdd_adld["SETTLEMENTDATE"]:
+#     date_list.append(date[:-9])
+# pdd_adld.insert(1, "Date", date_list)
+
+# # Find sum of energy for each day
+# pdd_adld = round(pdd_adld.groupby("Date")["TOTALDEMAND"].sum(), 2)
+# pdd_adld.rename("TOTAL DEMAND", inplace=True)
+# pdd_adld = pdd_adld.drop(pdd_adld.index[-1])
+
+# # Output pre-processed Adelaide Price Demand Dataset as csv
+# pdd_adld.to_csv("pdd_adld.csv")
+
+
+
+
+# """
+# BRISBANE
+# """
+
+# #PRE-PROCESS BRISBANE WEATHER DATASET
+# bris_df = pd.read_csv("weather_brisbane.csv")
+
+# # Filter data: Only interested in quantitative data
+# bris_weather = bris_df[["Date", "Minimum temperature (°C)", "Maximum temperature (°C)", "Rainfall (mm)", "Evaporation (mm)", 
+# "Sunshine (hours)", "Speed of maximum wind gust (km/h)"]]
+
+# # Missing Values: Impute Missing Values with Mean or interpolate?
+# bris_imputed = bris_df[["Minimum temperature (°C)", "Maximum temperature (°C)", "Rainfall (mm)", "Evaporation (mm)", 
+# "Sunshine (hours)", "Speed of maximum wind gust (km/h)"]]
+# bris_imputed = bris_imputed.fillna(bris_imputed.median())
+
+# # Find Mean Value and Insert to Dataframe
+# mean_temp = []
+# for i in range(len(bris_imputed)):
+#     mean_temp.append((bris_imputed["Minimum temperature (°C)"][i] + bris_imputed["Maximum temperature (°C)"][i])/2)
+# bris_imputed.insert(2, "Mean Temperature (°C)", mean_temp)
+
+# # Include and Set Date as Index
+# date = bris_weather["Date"]
+# new_date_format = []
+# for value in date:
+#     value = datetime.datetime.strptime(str(value), "%Y-%m-%d").strftime("%Y/%m/%d")
+#     new_date_format.append(value)
+# bris_imputed.insert(0, "Date", new_date_format)
+# bris_imputed.set_index("Date", inplace=True)
+
+# # Output pre-processed Brisbane Weather Dataset as csv
+# bris_imputed.to_csv("bris_weather.csv")
+
+# # Normalize: Rescale the values to be between 0 and 1
+# bris_normalized = (bris_imputed - bris_imputed.min()) / (bris_imputed.max() - bris_imputed.min())
+
+# # Output pre-processed normalized Brisbane Weather Dataset as csv
+# bris_normalized.to_csv("bris_weather_normalized.csv") 
+
+# #PRE-PROCESS PRICE DEMAND DATASET
+# pdd_df = pd.read_csv("price_demand_data.csv")
+
+# # Get dataframe for QLD
+# pdd_bris = pdd_df[pdd_df["REGION"] == "QLD1"]
+
+# # Change date format to daily date
+# date_list = []
+# for date in pdd_bris["SETTLEMENTDATE"]:
+#     date_list.append(date[:-9])
+# pdd_bris.insert(1, "Date", date_list)
+
+# # Find sum of energy for each day
+# pdd_bris = round(pdd_bris.groupby("Date")["TOTALDEMAND"].sum(), 2)
+# pdd_bris.rename("TOTAL DEMAND", inplace=True)
+# pdd_bris = pdd_bris.drop(pdd_bris.index[-1])
+
+# # Output pre-processed Brisbane Price Demand Dataset as csv
+# pdd_bris.to_csv("pdd_bris.csv")
+
+
+# Change Date Format, Insert Date to DataFrame
+date = melb_weather["Date"]
+new_date_format = []
+for value in date:
+    value = datetime.datetime.strptime(str(value), "%Y-%m-%d").strftime("%Y/%m/%d")
+    new_date_format.append(value)
+melb_imputed.insert(0, "Date", new_date_format)
+melb_imputed.set_index("Date", inplace=True)
+
+# import pandas as pd
+# import numpy as np
+# import math
+# from matplotlib import pyplot as plt
+# from scipy.stats import spearmanr
+# from sklearn.preprocessing import KBinsDiscretizer
+# from sklearn.feature_selection import mutual_info_classif
+
+# # Get General Statistics (From Non-Normalized Dataset)
+# melb_nn_df = pd.read_csv("melb_weather.csv")
+# melb_pdd_nn_df = pd.read_csv("pdd_melb.csv")
+# melb_nn = pd.merge(melb_nn_df, melb_pdd_nn_df, how='inner')
+# stats = melb_nn.describe()
+
+# # FEATURE SELECTION ON MELBOURNE DATASET (From Normalized Dataset)
+# melb_df = pd.read_csv("melb_weather_normalized.csv")
+# melb_pdd_df = pd.read_csv("pdd_melb_normalized.csv")
+
+# melb = pd.merge(melb_df, melb_pdd_df, how='inner')
+# melb.set_index("Date", drop=True, inplace=True)
+
+# # Discretize continuous data
+
+# for feature in melb_nn.iloc[:,1:]:
+#     q3, q1 = np.percentile(melb_nn[feature], [75, 25])
+#     iqr = q3 - q1
+#     h = 2 * iqr / len(melb)**(1/3)
+#     bins = int((melb_nn[feature].max() - melb_nn[feature].min()) / h) # Find number of bins
+#     equal_width = KBinsDiscretizer(n_bins=bins, encode='ordinal', strategy='uniform')
+#     melb["Binned " + feature] = equal_width.fit_transform(melb[feature].to_numpy().reshape(-1, 1)).astype(int)
+
+# binned_melb = melb[["Binned Minimum temperature (°C)", "Binned Maximum temperature (°C)", "Binned Mean Temperature (°C)", "Binned Rainfall (mm)", "Binned Evaporation (mm)", "Binned Sunshine (hours)", "Binned Speed of maximum wind gust (km/h)"]]
+# binned_melb.to_csv("binned_melb_weather.csv")
+
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.neighbors import KNeighborsClassifier as KNN
+from sklearn.model_selection import KFold 
+import numpy as np 
+import matplotlib.pyplot as plt 
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+from statistics import mean
+from sklearn.metrics import accuracy_score, recall_score, precision_score, f1_score
+
+kf_CV = KFold(n_splits=10, shuffle=True, random_state=42)
+data_train = pd.read_csv('filtered_melb_weather.csv')
+#x_cols = ["Binned Mean Temperature (°C)", "Binned Evaporation (mm)", "Binned Speed of maximum wind gust (km/h)", "Binned Rainfall (mm)"]
+x_cols = ["Binned Mean Temperature (°C)", "Binned Evaporation (mm)", "Binned Speed of maximum wind gust (km/h)"]
+#x_cols = ["Binned Mean Temperature (°C)", "Binned Evaporation (mm)", "Binned Rainfall (mm)"]
+y_cols = "Binned_Total_Demand"
+X = data_train[x_cols]
+Y = data_train[y_cols]
+
+# KNN with n = 1
+results = []
+for train_index, test_index in kf_CV.split(X):
+    X_train = []
+    X_test = []
+    Y_train = []
+    Y_test = []
+    for index in train_index:
+        X_train.append(X.iloc[index])
+        X_test.append(X.iloc[index])
+        Y_train.append(Y.iloc[index])
+        Y_test.append(Y.iloc[index])
+
+    # Training
+    knn = KNN(n_neighbors=1)
+    knn.fit(X_train, Y_train)    
+    
+    # Predictions
+    y_pred = knn.predict(X_test)
+    results.append(accuracy_score(Y_test, y_pred))
+print(mean(results))
+
+# KNN with n = 2
+results = []
+for train_index, test_index in kf_CV.split(X):
+    X_train = []
+    X_test = []
+    Y_train = []
+    Y_test = []
+    for index in train_index:
+        X_train.append(X.iloc[index])
+        X_test.append(X.iloc[index])
+        Y_train.append(Y.iloc[index])
+        Y_test.append(Y.iloc[index])
+
+    # Training
+    knn = KNN(n_neighbors=2)
+    knn.fit(X_train, Y_train)    
+    
+    # Predictions
+    y_pred = knn.predict(X_test)
+    results.append(accuracy_score(Y_test, y_pred))
+print(mean(results))
+
+# KNN with n = 3
+results = []
+for train_index, test_index in kf_CV.split(X):
+    X_train = []
+    X_test = []
+    Y_train = []
+    Y_test = []
+    for index in train_index:
+        X_train.append(X.iloc[index])
+        X_test.append(X.iloc[index])
+        Y_train.append(Y.iloc[index])
+        Y_test.append(Y.iloc[index])
+
+    # Training
+    knn = KNN(n_neighbors=3)
+    knn.fit(X_train, Y_train)    
+    
+    # Predictions
+    y_pred = knn.predict(X_test)
+    results.append(accuracy_score(Y_test, y_pred))
+print(mean(results))
+
+
+# KNN with n = 5
+results = []
+for train_index, test_index in kf_CV.split(X):
+    X_train = []
+    X_test = []
+    Y_train = []
+    Y_test = []
+    for index in train_index:
+        X_train.append(X.iloc[index])
+        X_test.append(X.iloc[index])
+        Y_train.append(Y.iloc[index])
+        Y_test.append(Y.iloc[index])
+
+    # Training
+    knn = KNN(n_neighbors=5)
+    knn.fit(X_train, Y_train)    
+    
+    # Predictions
+    y_pred = knn.predict(X_test)
+    results.append(accuracy_score(Y_test, y_pred))
+print(mean(results))
+    
+# # TESTING
+# # Pick KNN n = 1
+
+# knn = KNN(n_neighbors=3)
+# knn.fit(X, Y)
+
+# data_test = pd.read_csv('filtered_melb_weather_testing.csv')
+# x_cols = ["Binned Mean Temperature (°C)", "Binned Evaporation (mm)", "Binned Speed of maximum wind gust (km/h)"]
+# y_cols = "Binned_Total_Demand"
+# X_test = data_test[x_cols]
+# Y_test = data_test[y_cols]
+# Y_pred = knn.predict(X_test)
+# print('Accuracy:', accuracy_score(Y_test, Y_pred))
+# print('Recall:', recall_score(Y_test, Y_pred), average="micro")
+# #print('Precision:', precision_score(Y_test, Y_pred))
+# #print('F1:', f1_score(Y_test, Y_pred))
+
+# TESTING
+# Pick KNN n = 1
+
+kf_CV = KFold(n_splits=10, shuffle=True, random_state=42)
+data_train = pd.read_csv('filtered_melb_weather_testing.csv')
+#x_cols = ["Binned Mean Temperature (°C)", "Binned Evaporation (mm)", "Binned Speed of maximum wind gust (km/h)", "Binned Rainfall (mm)"]
+x_cols = ["Binned Mean Temperature (°C)", "Binned Evaporation (mm)", "Binned Speed of maximum wind gust (km/h)"]
+#x_cols = ["Binned Mean Temperature (°C)", "Binned Evaporation (mm)", "Binned Rainfall (mm)"]
+y_cols = "Binned_Total_Demand"
+X = data_train[x_cols]
+Y = data_train[y_cols]
+
+# KNN with n = 1
+results = []
+for train_index, test_index in kf_CV.split(X):
+    X_train = []
+    X_test = []
+    Y_train = []
+    Y_test = []
+    for index in train_index:
+        X_train.append(X.iloc[index])
+        X_test.append(X.iloc[index])
+        Y_train.append(Y.iloc[index])
+        Y_test.append(Y.iloc[index])
+
+    # Training
+    knn = KNN(n_neighbors=3)
+    knn.fit(X_train, Y_train)    
+    
+    # Predictions
+    y_pred = knn.predict(X_test)
+    results.append(accuracy_score(Y_test, y_pred))
+print(mean(results))
+
+# Temperature
+temp_bins = 10
+equal_width_temp = KBinsDiscretizer(n_bins=temp_bins, encode='ordinal', strategy='uniform')
+melb["Binned Mean Temperature"] = equal_width_temp.fit_transform(melb["Mean Temperature (°C)"].to_numpy().reshape(-1, 1)).astype(int)
+
+# Rainfall
+rain_bins = 10
+equal_width_rain = KBinsDiscretizer(n_bins=rain_bins, encode='ordinal', strategy='uniform')
+melb["Binned Rainfall"] = equal_width_rain.fit_transform(melb["Rainfall (mm)"].to_numpy().reshape(-1, 1)).astype(int)\
+
+# Evaporation
+evaporation_bins = 15
+equal_width_evaporation = KBinsDiscretizer(n_bins=evaporation_bins, encode='ordinal', strategy='uniform')
+melb["Binned Evaporation"] = equal_width_evaporation.fit_transform(melb["Evaporation (mm)"].to_numpy().reshape(-1, 1)).astype(int)
+
+# Sunshine
+sunshine_bins = 18
+equal_width_sunshine = KBinsDiscretizer(n_bins=sunshine_bins, encode='ordinal', strategy='uniform')
+melb["Binned Sunshine (hours)"] = equal_width_sunshine.fit_transform(melb["Evaporation (mm)"].to_numpy().reshape(-1, 1)).astype(int)
+
+# Energy demand
+demand_bins = 10
+equal_width_demand = KBinsDiscretizer(n_bins=demand_bins, encode='ordinal', strategy='uniform')
+melb["Binned Total Demand"] = equal_width_demand.fit_transform(melb["TOTAL DEMAND"].to_numpy().reshape(-1, 1)).astype(int)
+
+7 hours
+3
+agree: 4, 7
+4
+1
